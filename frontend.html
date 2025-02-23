@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BegueGPT Chat</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: black; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; height: 100vh; }
+        h1 { color: white; text-align: center; margin-top: 20px; }
+        .chat-container { width: 80%; height: 80vh; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); overflow: hidden; display: flex; flex-direction: column; }
+        .chat-box { padding: 15px; max-height: 100%; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; }
+        .message { margin: 10px 0; padding: 10px; border-radius: 5px; max-width: 60%; }
+        .user { background: #dcf8c6; text-align: right; align-self: flex-end; }
+        .bot { background: #f1f0f0; text-align: left; align-self: flex-start; }
+        .input-area { display: flex; padding: 10px; border-top: 1px solid #ddd; }
+        input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px; background: #25d366; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: 10px; }
+        button:hover { background: #1da851; }
+        .typing-indicator { color: gray; font-style: italic; }
+        .read-tick { color: blue; font-size: 14px; text-align: right; }
+    </style>
+</head>
+<body>
+    <h1>Bienvenue sur BegueGPT</h1>
+    <div class="chat-container">
+        <div class="chat-box" id="chat"></div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Ecrire un message ..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">Envoyer</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("userInput").focus();
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const chatDiv = document.getElementById("chat");
+            const userInput = document.getElementById("userInput");
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            const userMsgDiv = document.createElement("div");
+            userMsgDiv.className = "message user";
+            userMsgDiv.innerText = message;
+            chatDiv.appendChild(userMsgDiv);
+            userInput.value = "";
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+            
+            // 1% chance of just showing the read tick
+            if (Math.random() < 0.01) {
+                const tickDiv = document.createElement("div");
+                tickDiv.className = "read-tick";
+                tickDiv.innerHTML = "✔✔";
+                chatDiv.appendChild(tickDiv);
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+                return;
+            }
+            
+            // Show typing indicator
+            const typingIndicator = document.createElement("div");
+            typingIndicator.className = "typing-indicator";
+            typingIndicator.innerText = "Begue réfléchit...";
+            chatDiv.appendChild(typingIndicator);
+            chatDiv.scrollTop = chatDiv.scrollHeight;
+            
+            // Send message to backend
+            try {
+                const response = await fetch("http://localhost:8000/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text: message })
+                });
+                const data = await response.json();
+                
+                // Remove typing indicator
+                chatDiv.removeChild(typingIndicator);
+                
+                // Add bot response to chat
+                const botMsgDiv = document.createElement("div");
+                botMsgDiv.className = "message bot";
+                botMsgDiv.innerText = data.response;
+                chatDiv.appendChild(botMsgDiv);
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+            } catch (error) {
+                console.error("Error:", error);
+                chatDiv.removeChild(typingIndicator);
+            }
+        }
+    </script>
+</body>
+</html>
