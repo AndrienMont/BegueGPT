@@ -4,6 +4,8 @@
 - BOITOUZET Emilien
 - MONTMAYEUR Andrien
 
+# Fonctionnement
+
 BegueGPT est composé de deux fichiers : le *backend.py*, qui communique avec le model sur HuggingFace, et le *frontend.html*, qui fait l'affichage.
 Le projet est dockerisé. Il suffit de clone le repo et d'exécuter la commande :
 ```
