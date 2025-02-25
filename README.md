@@ -12,7 +12,7 @@ Le but de notre projet est de créer un chatbot qui bégaie. Pour cela nous l'av
 Le [dataset](https://huggingface.co/datasets/Khmarigou/alpace_begue_fr) a été généré depuis le [dataset initial](https://huggingface.co/datasets/yahma/alpaca-cleaned) en applicant ce [notebook kaggle](https://www.kaggle.com/code/khmarigou/transforme-dataset-into-begue)
 
 Une fois le dataset prêt, nous avons entrainé le modèle disponible sur **Hugging Face** [SmolLM2-135M-Instruct](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct), avec ce [notebook kaggle](https://www.kaggle.com/code/khmarigou/trainingbeguemodel). 
-Après plusieurs entrainement nous avons un modèle qui arrive correctement à bagayer mais divague et se répète en boucle, après plusieurs ajustement en changeant la taille de l'entrainement ou le learning rate nous avons toujours le même résultat. Même en faisant un entrainement sur un tout petit jeu de donnée, le modèle ne bagaye pas mais divague quand même, nous n'avons pas réussit à le stabiliser. Le modèle fonctionne quand même et est disponible sur hugging face [BegueGPT](https://huggingface.co/Khmarigou/Begue)
+Après plusieurs entrainement nous avons un modèle qui arrive correctement à bagayer mais divague et se répète en boucle, après plusieurs ajustement en changeant la taille de l'entrainement ou le learning rate nous avons toujours le même résultat. Même en faisant un entrainement sur un tout petit jeu de donnée, le modèle ne bagaye pas mais divague quand même, nous n'avons pas réussit à le stabiliser. Le modèle fonctionne quand même et est disponible sur hugging face [BegueGPT](https://huggingface.co/Khmarigou/Begue).
 
 L'entrainement final a été fait avec les paramètres suivants :
 - per_device_train_batch_size=2,
